@@ -9,14 +9,4 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  build: {
-    rollupOptions: {
-      input: {
-        client: path.resolve(__dirname, 'src/entry-client.tsx'),
-      },
-    },
-  },
-  ssr: {
-    noExternal: ['@tanstack/react-query'],
-  },
 })

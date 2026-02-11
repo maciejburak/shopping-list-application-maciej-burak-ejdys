@@ -4,20 +4,13 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch server/index.ts",
-    "build": "npm run build:client && npm run build:server",
-    "build:client": "vite build --outDir dist/client",
-    "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
-    "start": "NODE_ENV=production node dist/server/index.js",
-    "typecheck": "tsc --noEmit",
-    "preview": "npm run build && npm run start"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.21",
     "axios": "^1.13.5",
     "cors": "^2.8.6",
-    "dotenv": "^17.2.4",
     "express": "^5.2.1",
-    "isbot": "^5.1.31",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },
@@ -30,12 +23,10 @@
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.4",
-    "nodemon": "^3.1.11",
     "tailwindcss": "^4.1.13",
     "tsx": "^4.21.0",
     "typescript": "^5.9.2",
     "vite": "^7.1.7",
-    "vite-plugin-ssr": "^0.4.142",
     "vite-tsconfig-paths": "^5.1.4"
   }
 }

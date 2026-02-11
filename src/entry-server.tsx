@@ -1,34 +1,25 @@
 import { renderToString } from 'react-dom/server'
-import { QueryClientProvider, HydrationBoundary, dehydrate } from '@tanstack/react-query'
+import { QueryClientProvider, dehydrate } from '@tanstack/react-query'
 import { createQueryClient } from './lib/query-client'
 import { App } from './App'
+import { shoppingListKeys } from './features/shopping-list'
+import type { ShoppingItem } from './features/shopping-list'
 
-/**
- * Server-side entry point
- * Renders React to HTML string with prefetched data
- */
-
-export async function render() {
-  // Create fresh QueryClient for each request (prevent state leakage)
+export async function render(items: ShoppingItem[]) {
+  // Utwórz nowy QueryClient dla tego requesta
   const queryClient = createQueryClient()
 
-  // Prefetch data here if needed
-  // Example:
-  // await queryClient.prefetchQuery({
-  //   queryKey: shoppingListKeys.list(),
-  //   queryFn: () => shoppingListApi.getItems(),
-  // })
+  // Ustaw dane w cache
+  queryClient.setQueryData(shoppingListKeys.list(), items)
 
-  // Render app to HTML
+  // Renderuj React do HTML
   const html = renderToString(
     <QueryClientProvider client={queryClient}>
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <App />
-      </HydrationBoundary>
+      <App />
     </QueryClientProvider>
   )
 
-  // Dehydrate state to send to client
+  // Przygotuj dehydrated state
   const dehydratedState = dehydrate(queryClient)
 
   return { html, dehydratedState }

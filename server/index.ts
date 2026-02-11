@@ -1,105 +1,72 @@
 import express from 'express'
-import cors from 'cors'
 import { createServer as createViteServer } from 'vite'
-import type { ViteDevServer } from 'vite'
+import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const app = express()
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 5173
+const API_URL = 'http://localhost:3000/api'
 
-// Middleware
-app.use(cors())
-app.use(express.json())
+async function startServer() {
+  const vite = await createViteServer({
+    server: { middlewareMode: true },
+    appType: 'custom',
+  })
 
-async function createServer() {
-  let vite: ViteDevServer
-
-  if (process.env.NODE_ENV !== 'production') {
-    // Development: Use Vite dev server
-    vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: 'custom',
-    })
-    app.use(vite.middlewares)
-  } else {
-    // Production: Serve static files
-    app.use(express.static(path.resolve(__dirname, '../dist/client')))
-  }
-
-  // SSR handler
-  app.use('*', async (req, res) => {
-    const url = req.originalUrl
+  // Handler dla HTML - SSR
+  app.use(async (req, res, next) => {
+    // Przepuść requesty do plików statycznych
+    if (req.url.includes('.') && !req.url.endsWith('.html')) {
+      return next()
+    }
 
     try {
-      let template: string
-      let render: () => Promise<{ html: string; dehydratedState: any }>
+      // 1. Pobierz dane z API
+      const response = await fetch(`${API_URL}/items`)
+      const data = await response.json()
 
-      if (process.env.NODE_ENV !== 'production') {
-        // Development: Load template and render function via Vite
-        template = await vite.transformIndexHtml(
-          url,
-          `
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Shopping List</title>
-  </head>
-  <body>
-    <div id="root"><!--app-html--></div>
-    <script type="module" src="/src/entry-client.tsx"></script>
-  </body>
-</html>
-          `.trim()
-        )
+      console.log('📦 Fetched items from API:', data)
 
-        render = (await vite.ssrLoadModule('/src/entry-server.tsx')).render
-      } else {
-        // Production: Use built files
-        const fs = await import('fs/promises')
-        template = await fs.readFile(
-          path.resolve(__dirname, '../dist/client/index.html'),
-          'utf-8'
-        )
-        // @ts-ignore - dist folder only exists after build
-        render = (await import('../dist/server/entry-server.js')).render
-      }
+      // 2. Wczytaj HTML template
+      let template = fs.readFileSync(
+        path.resolve(__dirname, '../index.html'),
+        'utf-8'
+      )
 
-      // Render app
-      const { html: appHtml, dehydratedState } = await render()
+      // 3. Załaduj entry-server przez Vite
+      const { render } = await vite.ssrLoadModule('/src/entry-server.tsx')
 
-      // Inject rendered HTML and state
+      // 4. Renderuj React do HTML z danymi
+      const { html: appHtml, dehydratedState } = await render(data.items)
+
+      // 5. Transformuj template przez Vite
+      template = await vite.transformIndexHtml(req.url, template)
+
+      // 6. Wstrzyknij zrenderowany HTML i stan
       const html = template
         .replace('<!--app-html-->', appHtml)
         .replace(
           '</body>',
-          `
-          <script>
-            window.__REACT_QUERY_STATE__ = ${JSON.stringify(dehydratedState)};
-          </script>
-          </body>
-          `
+          `<script>window.__REACT_QUERY_STATE__ = ${JSON.stringify(dehydratedState)};</script></body>`
         )
 
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
     } catch (e) {
-      // Handle errors
-      if (process.env.NODE_ENV !== 'production' && vite) {
-        vite.ssrFixStacktrace(e as Error)
-      }
-      console.error((e as Error).stack)
-      res.status(500).end((e as Error).stack)
+      console.error('❌ Error:', e)
+      vite.ssrFixStacktrace(e as Error)
+      next(e)
     }
   })
 
+  app.use(vite.middlewares)
+
   app.listen(PORT, () => {
-    console.log(`🚀 Server running at http://localhost:${PORT}`)
-    console.log(`📦 Mode: ${process.env.NODE_ENV || 'development'}`)
+    console.log(`🚀 Frontend running at http://localhost:${PORT}`)
+    console.log(`📡 API should be running at ${API_URL}`)
   })
 }
 
-createServer()
+startServer()

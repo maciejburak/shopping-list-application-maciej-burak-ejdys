@@ -3,62 +3,30 @@ import type {
   ShoppingItem,
   CreateShoppingItemDTO,
   UpdateShoppingItemDTO,
-  ShoppingListFilters,
 } from '../types/shopping-list.types'
 
-/**
- * Shopping List API Layer
- * Pure API calls without React/TanStack Query dependencies
- * Can be used anywhere (server, client, tests)
- */
-
 export const shoppingListApi = {
-  /**
-   * Fetch all shopping items
-   */
-  async getItems(filters?: ShoppingListFilters): Promise<ShoppingItem[]> {
-    const { data } = await apiClient.get<ShoppingItem[]>('/shopping-items', {
-      params: filters,
-    })
-    return data
+  async getItems(): Promise<ShoppingItem[]> {
+    const { data } = await apiClient.get<{ items: ShoppingItem[] }>('/items')
+    return data.items
   },
 
-  /**
-   * Fetch single item by ID
-   */
-  async getItem(id: string): Promise<ShoppingItem> {
-    const { data } = await apiClient.get<ShoppingItem>(`/shopping-items/${id}`)
-    return data
+  async getItem(id: number): Promise<ShoppingItem> {
+    const { data } = await apiClient.get<{ item: ShoppingItem }>(`/items/${id}`)
+    return data.item
   },
 
-  /**
-   * Create new shopping item
-   */
   async createItem(dto: CreateShoppingItemDTO): Promise<ShoppingItem> {
-    const { data } = await apiClient.post<ShoppingItem>('/shopping-items', dto)
-    return data
+    const { data } = await apiClient.post<{ item: ShoppingItem }>('/items', dto)
+    return data.item
   },
 
-  /**
-   * Update existing item
-   */
-  async updateItem(id: string, dto: UpdateShoppingItemDTO): Promise<ShoppingItem> {
-    const { data } = await apiClient.patch<ShoppingItem>(`/shopping-items/${id}`, dto)
-    return data
+  async updateItem(id: number, dto: UpdateShoppingItemDTO): Promise<ShoppingItem> {
+    const { data } = await apiClient.put<{ item: ShoppingItem }>(`/items/${id}`, dto)
+    return data.item
   },
 
-  /**
-   * Delete item
-   */
-  async deleteItem(id: string): Promise<void> {
-    await apiClient.delete(`/shopping-items/${id}`)
-  },
-
-  /**
-   * Toggle item checked status
-   */
-  async toggleItem(id: string): Promise<ShoppingItem> {
-    const { data } = await apiClient.patch<ShoppingItem>(`/shopping-items/${id}/toggle`)
-    return data
+  async deleteItem(id: number): Promise<void> {
+    await apiClient.delete(`/items/${id}`)
   },
 }
