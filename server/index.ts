@@ -1,6 +1,7 @@
 import express from 'express'
 import { createServer as createViteServer } from 'vite'
-import { createSSRHandler } from './controllers/ssr.controller.js'
+import { createHomeSSRHandler } from './controllers/ssr-home.controller.js'
+import { createItemDetailsSSRHandler } from './controllers/ssr-item-details.controller.js'
 
 const app = express()
 const PORT = 5173
@@ -11,7 +12,8 @@ async function startServer() {
     appType: 'custom',
   })
 
-  app.use(createSSRHandler(vite))
+  app.use(createHomeSSRHandler(vite))
+  app.use(createItemDetailsSSRHandler(vite))
   app.use(vite.middlewares)
 
   app.listen(PORT, () => {
