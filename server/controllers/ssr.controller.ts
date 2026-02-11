@@ -9,7 +9,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export function createSSRHandler(vite: ViteDevServer) {
   return async (req: Request, res: Response, next: NextFunction) => {
-    if (req.url.includes('.') && !req.url.endsWith('.html')) {
+    const url = req.url.split('?')[0]
+    if (url !== '/') {
       return next()
     }
 
@@ -24,8 +25,8 @@ export function createSSRHandler(vite: ViteDevServer) {
       const { render } = await vite.ssrLoadModule('/src/entry-server.tsx')
       const { html: reactHtml } = await render(items)
 
-      const htmlWithVite = await vite.transformIndexHtml(req.url, template)
-      const finalHtml = htmlWithVite.replace('<!--app-html-->', reactHtml)
+      const htmlWithReact = template.replace('<!--app-html-->', reactHtml)
+      const finalHtml = await vite.transformIndexHtml(req.url, htmlWithReact)
 
       res.status(200).set({ 'Content-Type': 'text/html' }).send(finalHtml)
     } catch (error) {
