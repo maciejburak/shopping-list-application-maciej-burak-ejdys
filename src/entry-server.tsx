@@ -1,8 +1,8 @@
 import { renderToString } from 'react-dom/server'
 import { StaticRouter } from 'react-router'
 import { QueryClient, QueryClientProvider, dehydrate } from '@tanstack/react-query'
+import { ServerStyleSheet } from 'styled-components'
 import { App } from './App'
-import './index.css'
 
 interface RenderOptions {
   url: string
@@ -11,27 +11,36 @@ interface RenderOptions {
 }
 
 export async function render({ url, queryKey, data }: RenderOptions) {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        enabled: false,
+  const sheet = new ServerStyleSheet()
+
+  try {
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          enabled: false,
+        },
       },
-    },
-  })
+    })
 
-  if (queryKey && data !== undefined) {
-    queryClient.setQueryData(queryKey, data)
+    if (queryKey && data !== undefined) {
+      queryClient.setQueryData(queryKey, data)
+    }
+
+    const html = renderToString(
+      sheet.collectStyles(
+        <StaticRouter location={url}>
+          <QueryClientProvider client={queryClient}>
+            <App />
+          </QueryClientProvider>
+        </StaticRouter>
+      )
+    )
+
+    const styleTags = sheet.getStyleTags()
+    const dehydratedState = dehydrate(queryClient)
+
+    return { html, styleTags, dehydratedState }
+  } finally {
+    sheet.seal()
   }
-
-  const html = renderToString(
-    <StaticRouter location={url}>
-      <QueryClientProvider client={queryClient}>
-        <App />
-      </QueryClientProvider>
-    </StaticRouter>
-  )
-
-  const dehydratedState = dehydrate(queryClient)
-
-  return { html, dehydratedState }
 }

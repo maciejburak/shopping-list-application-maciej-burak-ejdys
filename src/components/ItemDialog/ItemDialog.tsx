@@ -2,12 +2,11 @@ import { memo } from "react";
 import { useItemDialog } from "./useItemDialog";
 import { IconButton } from "../IconButton/IconButton";
 import { CloseIcon, SendIcon } from "../icons";
-import styles from "./ItemDialog.module.css";
+import * as S from "./ItemDialog.styles";
 
 export const ItemDialog = memo(function ItemDialog() {
   const {
     shouldRender,
-    title,
     name,
     price,
     description,
@@ -22,69 +21,71 @@ export const ItemDialog = memo(function ItemDialog() {
   if (!shouldRender) return null;
 
   return (
-    <div className={styles.overlay} onClick={onClose}>
-      <div className={styles.dialog} onClick={(e) => e.stopPropagation()}>
-        <div className={styles.header}>
+    <S.Overlay onClick={onClose}>
+      <S.Dialog onClick={(e) => e.stopPropagation()}>
+        <S.Header>
           <IconButton
             onClick={onClose}
-            className={`icon-button ${styles.closeButton}`}
+            className="icon-button"
             aria-label="Close dialog"
+            style={{
+              position: 'absolute',
+              right: '8px',
+              top: '30px',
+              transform: 'translateY(-50%)'
+            }}
           >
             <CloseIcon />
           </IconButton>
-        </div>
+        </S.Header>
 
-        <div className={styles.content}>
-          <div className={styles.form}>
-            <div className={styles.row}>
-              <div className={styles.field} style={{ flex: 1 }}>
-                <input
+        <S.Content>
+          <S.Form>
+            <S.Row>
+              <S.Field style={{ flex: 1 }}>
+                <S.Input
                   id="name"
                   type="text"
                   value={name}
                   onChange={(e) => onNameChange(e.target.value)}
-                  className={styles.input}
                   placeholder="Name"
                   autoFocus
                 />
-              </div>
+              </S.Field>
 
-              <div className={styles.field} style={{ flex: 1 }}>
-                <input
+              <S.Field style={{ flex: 1 }}>
+                <S.Input
                   id="price"
                   type="number"
                   value={price}
                   onChange={(e) => onPriceChange(e.target.value)}
                   step="0.01"
-                  className={styles.input}
                   placeholder="Price"
                 />
-              </div>
-            </div>
+              </S.Field>
+            </S.Row>
 
-            <div className={styles.field}>
-              <textarea
+            <S.Field>
+              <S.Textarea
                 id="description"
                 value={description}
                 onChange={(e) => onDescriptionChange(e.target.value)}
-                className={styles.textarea}
                 placeholder="Description"
               />
-            </div>
-          </div>
-        </div>
+            </S.Field>
+          </S.Form>
+        </S.Content>
 
-        <div className={styles.footer}>
-          <button
+        <S.Footer>
+          <S.SubmitButton
             onClick={onSave}
             disabled={isPending}
-            className={styles.submitButton}
             aria-label="Save item"
           >
             <SendIcon />
-          </button>
-        </div>
-      </div>
-    </div>
+          </S.SubmitButton>
+        </S.Footer>
+      </S.Dialog>
+    </S.Overlay>
   );
 });

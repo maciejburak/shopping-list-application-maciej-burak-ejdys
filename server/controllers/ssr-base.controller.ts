@@ -21,11 +21,12 @@ export async function renderSSR(
     )
 
     const { render } = await vite.ssrLoadModule('/src/entry-server.tsx')
-    const { html: reactHtml, dehydratedState } = await render({ url, queryKey, data })
+    const { html: reactHtml, styleTags, dehydratedState } = await render({ url, queryKey, data })
 
     const stateScript = `<script>window.__PRELOADED_STATE__=${JSON.stringify(dehydratedState).replace(/</g, '\\u003c')}</script>`
 
     const htmlWithReact = template
+      .replace('</head>', `${styleTags}</head>`)
       .replace('<!--app-html-->', reactHtml)
       .replace('</body>', `${stateScript}</body>`)
 

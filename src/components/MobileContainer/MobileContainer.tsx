@@ -1,5 +1,5 @@
 import { type ReactNode } from "react";
-import styles from "./MobileContainer.module.css";
+import * as S from "./MobileContainer.styles";
 
 interface MobileContainerProps {
   children: ReactNode;
@@ -7,18 +7,16 @@ interface MobileContainerProps {
 
 export function MobileContainer({ children }: MobileContainerProps) {
   return (
-    <div className={styles.container}>
-      <div className={styles.notch} />
-
-      <div className={styles.content}>
-        <div className={styles.contentContainer}>
+    <S.Container>
+      <S.Notch />
+      <S.Content>
+        <S.ContentContainer>
           {children}
-        </div>
-      </div>
-
-      <div className={styles.bottomPart}>
-        <div className={styles.bottomBar} />
-      </div>
-    </div>
+        </S.ContentContainer>
+      </S.Content>
+      <S.BottomPart>
+        <S.BottomBar />
+      </S.BottomPart>
+    </S.Container>
   );
 }
