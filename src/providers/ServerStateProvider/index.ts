@@ -1,3 +1,4 @@
+export { TanStackProvider } from './TanStackProvider'
 export {
   useItems,
   useItem,
@@ -6,5 +7,6 @@ export {
 } from './selectors'
 export {
   useCreateItem,
+  useUpdateItem,
   useDeleteItem,
 } from './mutations'

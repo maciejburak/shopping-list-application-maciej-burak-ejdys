@@ -43,7 +43,6 @@ export async function getItems(): Promise<Item[]> {
   })
 
   const items = response?.items || []
-  console.log(`📦 Got ${items.length} items from API`)
   return items
 }
 
@@ -55,7 +54,6 @@ export async function getItemById(id: number): Promise<Item | null> {
   })
 
   if (response) {
-    console.log(`📦 Got item ${id} for SSR`)
     return response.item
   }
 

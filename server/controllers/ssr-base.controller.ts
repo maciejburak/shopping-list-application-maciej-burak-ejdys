@@ -10,7 +10,9 @@ export async function renderSSR(
   vite: ViteDevServer,
   req: Request,
   res: Response,
-  url: string
+  url: string,
+  queryKey: unknown[],
+  data: any
 ): Promise<void> {
   try {
     const template = readFileSync(
@@ -19,9 +21,14 @@ export async function renderSSR(
     )
 
     const { render } = await vite.ssrLoadModule('/src/entry-server.tsx')
-    const { html: reactHtml } = await render(url)
+    const { html: reactHtml, dehydratedState } = await render({ url, queryKey, data })
 
-    const htmlWithReact = template.replace('<!--app-html-->', reactHtml)
+    const stateScript = `<script>window.__PRELOADED_STATE__=${JSON.stringify(dehydratedState).replace(/</g, '\\u003c')}</script>`
+
+    const htmlWithReact = template
+      .replace('<!--app-html-->', reactHtml)
+      .replace('</body>', `${stateScript}</body>`)
+
     const finalHtml = await vite.transformIndexHtml(req.url, htmlWithReact)
 
     res.status(200).set({ 'Content-Type': 'text/html' }).send(finalHtml)

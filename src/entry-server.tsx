@@ -1,11 +1,15 @@
 import { renderToString } from 'react-dom/server'
 import { StaticRouter } from 'react-router'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider, dehydrate } from '@tanstack/react-query'
 import { App } from './App'
 
-export async function render(url: string) {
-  // Create QueryClient with queries disabled for SSR
-  // This means SSR will render loading states, not actual data
+interface RenderOptions {
+  url: string
+  queryKey: unknown[]
+  data: any
+}
+
+export async function render({ url, queryKey, data }: RenderOptions) {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -13,6 +17,10 @@ export async function render(url: string) {
       },
     },
   })
+
+  if (queryKey && data !== undefined) {
+    queryClient.setQueryData(queryKey, data)
+  }
 
   const html = renderToString(
     <StaticRouter location={url}>
@@ -22,5 +30,7 @@ export async function render(url: string) {
     </StaticRouter>
   )
 
-  return { html }
+  const dehydratedState = dehydrate(queryClient)
+
+  return { html, dehydratedState }
 }

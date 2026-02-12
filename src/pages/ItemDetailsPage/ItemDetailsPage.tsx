@@ -2,18 +2,7 @@ import { Link } from 'react-router-dom'
 import { useItemDetails } from './useItemDetails'
 
 export function ItemDetailsPage() {
-  const { item, isLoading, error, isPending, onDelete } = useItemDetails()
-
-  if (isLoading) {
-    return (
-      <div className="max-w-4xl mx-auto p-8">
-        <Link to="/" className="text-blue-600 hover:underline mb-4 inline-block">
-          ← Back to list
-        </Link>
-        <div>Loading...</div>
-      </div>
-    )
-  }
+  const { item, error, isPending, onDelete } = useItemDetails()
 
   if (error || !item) {
     return (

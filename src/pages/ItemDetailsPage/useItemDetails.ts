@@ -8,7 +8,7 @@ export function useItemDetails() {
 
   const itemId = parseInt(id!, 10)
 
-  const { data: item, isLoading, error } = useItem(itemId)
+  const { data: item, error } = useItem(itemId)
   const deleteMutation = useDeleteItem()
 
   const handleDelete = () => {
@@ -21,7 +21,6 @@ export function useItemDetails() {
 
   return {
     item,
-    isLoading,
     error,
     isPending: deleteMutation.isPending,
     onDelete: handleDelete,

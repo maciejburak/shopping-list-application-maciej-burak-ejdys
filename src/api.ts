@@ -27,6 +27,11 @@ export const itemsApi = {
     return data.item
   },
 
+  update: async (id: number, item: { name: string; price: number; description?: string }) => {
+    const { data } = await api.put<{ item: Item }>(`/items/${id}`, item)
+    return data.item
+  },
+
   delete: async (id: number) => {
     await api.delete(`/items/${id}`)
   },

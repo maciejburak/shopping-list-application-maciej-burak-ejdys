@@ -12,6 +12,19 @@ export function useCreateItem() {
   })
 }
 
+export function useUpdateItem() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: number; data: { name: string; price: number; description?: string } }) =>
+      itemsApi.update(id, data),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['items'] })
+      queryClient.invalidateQueries({ queryKey: ['item', variables.id] })
+    },
+  })
+}
+
 export function useDeleteItem() {
   const queryClient = useQueryClient()
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useDialogState, useDialogActions } from '../../providers/DialogProvider'
 import { useItemFromCache } from '../../providers/ServerStateProvider/selectors'
-import { useCreateItem } from '../../providers/ServerStateProvider/mutations'
+import { useCreateItem, useUpdateItem } from '../../providers/ServerStateProvider/mutations'
 
 export function useItemDialog() {
   const { isOpen, mode, itemId } = useDialogState()
@@ -12,6 +12,7 @@ export function useItemDialog() {
 
   const item = useItemFromCache(itemId)
   const createMutation = useCreateItem()
+  const updateMutation = useUpdateItem()
 
   useEffect(() => {
     if (isOpen && mode === 'edit' && item) {
@@ -50,6 +51,22 @@ export function useItemDialog() {
           },
         }
       )
+    } else if (mode === 'edit' && itemId) {
+      updateMutation.mutate(
+        {
+          id: itemId,
+          data: {
+            name: name.trim(),
+            price: priceNum,
+            description: description.trim(),
+          },
+        },
+        {
+          onSuccess: () => {
+            close()
+          },
+        }
+      )
     }
   }
 
@@ -64,7 +81,7 @@ export function useItemDialog() {
     name,
     price,
     description,
-    isPending: createMutation.isPending,
+    isPending: createMutation.isPending || updateMutation.isPending,
     onNameChange: (value: string) => setName(value),
     onPriceChange: (value: string) => setPrice(value),
     onDescriptionChange: (value: string) => setDescription(value),
