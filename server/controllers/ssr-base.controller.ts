@@ -10,8 +10,7 @@ export async function renderSSR(
   vite: ViteDevServer,
   req: Request,
   res: Response,
-  url: string,
-  initialData: any
+  url: string
 ): Promise<void> {
   try {
     const template = readFileSync(
@@ -20,7 +19,7 @@ export async function renderSSR(
     )
 
     const { render } = await vite.ssrLoadModule('/src/entry-server.tsx')
-    const { html: reactHtml } = await render(url, initialData)
+    const { html: reactHtml } = await render(url)
 
     const htmlWithReact = template.replace('<!--app-html-->', reactHtml)
     const finalHtml = await vite.transformIndexHtml(req.url, htmlWithReact)

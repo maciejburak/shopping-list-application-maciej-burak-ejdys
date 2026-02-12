@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useShoppingList } from './useShoppingList'
 
 export const ShoppingListPage = memo(function ShoppingListPage() {
-  const { items, onAddNew, onEdit, onDelete } = useShoppingList()
+  const { items, isLoading, onAddNew, onEdit, onDelete } = useShoppingList()
 
   return (
     <div className="max-w-4xl mx-auto p-8">
@@ -17,8 +17,11 @@ export const ShoppingListPage = memo(function ShoppingListPage() {
         </button>
       </div>
 
-      <div className="space-y-4">
-        {items.map((item) => (
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <div className="space-y-4">
+          {items.map((item) => (
           <div key={item.id} className="p-4 border rounded bg-white shadow-sm">
             <div className="flex justify-between items-start">
               <div>
@@ -48,9 +51,10 @@ export const ShoppingListPage = memo(function ShoppingListPage() {
                 </button>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 })

@@ -1,6 +1,5 @@
 import type { Request, Response, NextFunction } from 'express'
 import type { ViteDevServer } from 'vite'
-import { getItems } from '../services/api.service.js'
 import { renderSSR, shouldSkipRoute, handleSSRError } from './ssr-base.controller.js'
 
 export function createHomeSSRHandler(vite: ViteDevServer) {
@@ -16,8 +15,8 @@ export function createHomeSSRHandler(vite: ViteDevServer) {
     }
 
     try {
-      const items = await getItems()
-      await renderSSR(vite, req, res, url, items)
+      // SSR renders loading state, client will fetch data after hydration
+      await renderSSR(vite, req, res, url)
     } catch (error) {
       handleSSRError(error as Error, req, res, next)
     }
