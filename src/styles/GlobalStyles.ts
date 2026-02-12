@@ -43,38 +43,4 @@ export const GlobalStyles = createGlobalStyle`
     text-decoration: none;
     color: inherit;
   }
-
-  /* Shared utility classes */
-  .page-container {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .page-title {
-    font-size: 24px;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 24px;
-    text-align: center;
-  }
-
-  .icon-button {
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #666;
-    transition: all 0.2s;
-    padding: 0;
-    border-radius: 6px;
-  }
-
-  .icon-button:hover {
-    color: #333;
-    background: #F5F5F5;
-  }
 `;

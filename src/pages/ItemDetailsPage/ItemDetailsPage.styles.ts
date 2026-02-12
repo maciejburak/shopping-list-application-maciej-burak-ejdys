@@ -17,6 +17,14 @@ export const TitleContainer = styled.div`
   text-align: center;
 `;
 
+export const Title = styled.h1`
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  text-align: center;
+`;
+
 export const Description = styled.p`
   font-size: 16px;
   line-height: 1.6;

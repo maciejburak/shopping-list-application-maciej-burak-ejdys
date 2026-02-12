@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { useItemDialog } from "./useItemDialog";
-import { IconButton } from "../IconButton/IconButton";
-import { CloseIcon, SendIcon } from "../icons";
+import { IconButton } from "../../common/IconButton/IconButton";
+import { CloseIcon, SendIcon } from "../../icons";
 import * as S from "./ItemDialog.styles";
 
 export const ItemDialog = memo(function ItemDialog() {
@@ -26,7 +26,6 @@ export const ItemDialog = memo(function ItemDialog() {
         <S.Header>
           <IconButton
             onClick={onClose}
-            className="icon-button"
             aria-label="Close dialog"
             style={{
               position: 'absolute',

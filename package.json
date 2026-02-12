@@ -25,6 +25,7 @@
     "@types/react-dom": "^19.2.3",
     "@types/styled-components": "^5.1.36",
     "@vitejs/plugin-react": "^5.1.4",
+    "babel-plugin-styled-components": "^2.1.4",
     "tsx": "^4.21.0",
     "typescript": "^5.9.2",
     "vite": "^7.1.7",

@@ -40,6 +40,9 @@ export async function render({ url, queryKey, data }: RenderOptions) {
     const dehydratedState = dehydrate(queryClient)
 
     return { html, styleTags, dehydratedState }
+  } catch (error) {
+    console.error('SSR Error:', error)
+    throw error
   } finally {
     sheet.seal()
   }

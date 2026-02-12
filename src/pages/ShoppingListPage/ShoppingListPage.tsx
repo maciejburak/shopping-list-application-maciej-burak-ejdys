@@ -1,7 +1,8 @@
 import { memo } from "react";
 import { Link } from "react-router-dom";
 import { useShoppingList } from "./useShoppingList";
-import { IconButton } from "../../components/IconButton/IconButton";
+import { ContentContainer } from "../../components/containers/ContentContainer";
+import { IconButton } from "../../components/common/IconButton";
 import { EditIcon, DeleteIcon } from "../../components/icons";
 import * as S from "./ShoppingListPage.styles";
 
@@ -11,9 +12,7 @@ export const ShoppingListPage = memo(function ShoppingListPage() {
   const total = items.reduce((sum, item) => sum + item.price, 0);
 
   return (
-    <div className="page-container">
-      <h1 className="page-title">Shopping List</h1>
-
+    <ContentContainer title="Shopping List">
       <S.List>
         {items.map((item, index) => (
           <S.Item key={item.id}>
@@ -29,7 +28,6 @@ export const ShoppingListPage = memo(function ShoppingListPage() {
             <S.ItemActions>
               <IconButton
                 onClick={() => onEdit(item.id)}
-                className="icon-button"
                 aria-label="Edit item"
               >
                 <EditIcon />
@@ -37,7 +35,6 @@ export const ShoppingListPage = memo(function ShoppingListPage() {
 
               <IconButton
                 onClick={() => onDelete(item.id)}
-                className="icon-button"
                 aria-label="Delete item"
               >
                 <DeleteIcon />
@@ -56,6 +53,6 @@ export const ShoppingListPage = memo(function ShoppingListPage() {
         <span style={{ fontSize: '20px', fontWeight: 600 }}>+</span>
         <span>Add Product</span>
       </S.AddButton>
-    </div>
+    </ContentContainer>
   );
 });

@@ -14,7 +14,7 @@ export const Item = styled.div`
   gap: 16px;
   height: 50px;
 
-  &:hover .icon-button {
+  &:hover button {
     opacity: 1;
   }
 `;
@@ -60,7 +60,7 @@ export const ItemActions = styled.div`
   align-items: center;
   margin: 8px;
 
-  .icon-button {
+  button {
     opacity: 0;
   }
 `;

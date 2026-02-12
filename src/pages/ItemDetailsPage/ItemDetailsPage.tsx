@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useItemDetails } from "./useItemDetails";
-import { IconButton } from "../../components/IconButton/IconButton";
+import { ContentContainer } from "../../components/containers/ContentContainer";
+import { IconButton } from "../../components/common/IconButton";
 import { BackIcon } from "../../components/icons";
 import * as S from "./ItemDetailsPage.styles";
 
@@ -10,26 +11,25 @@ export function ItemDetailsPage() {
 
   if (isLoading) {
     return (
-      <div className="page-container">
+      <ContentContainer>
         <S.Loading>Loading...</S.Loading>
-      </div>
+      </ContentContainer>
     );
   }
 
   if (error || !item) {
     return (
-      <div className="page-container">
+      <ContentContainer>
         <S.Error>Item not found</S.Error>
-      </div>
+      </ContentContainer>
     );
   }
 
   return (
-    <div className="page-container" style={{ paddingBottom: '60px' }}>
+    <ContentContainer>
       <S.Header>
         <IconButton
           onClick={() => navigate("/")}
-          className="icon-button"
           aria-label="Back to list"
           style={{ position: 'absolute', left: 0 }}
         >
@@ -37,13 +37,13 @@ export function ItemDetailsPage() {
         </IconButton>
 
         <S.TitleContainer>
-          <h1 className="page-title" style={{ marginBottom: 0 }}>{item.name}</h1>
+          <S.Title>{item.name}</S.Title>
         </S.TitleContainer>
       </S.Header>
 
       {item.description && (
         <S.Description>{item.description}</S.Description>
       )}
-    </div>
+    </ContentContainer>
   );
 }

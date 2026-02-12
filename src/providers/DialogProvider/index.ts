@@ -1,2 +1,3 @@
-export { DialogProvider, useDialogState, useDialogActions, useDialogContext } from './DialogProvider'
-export type { DialogMode } from './DialogProvider'
+export { DialogProvider } from './DialogProvider'
+export { useDialogState, useDialogActions } from './selectors'
+export type { DialogMode, DialogState } from './types'
