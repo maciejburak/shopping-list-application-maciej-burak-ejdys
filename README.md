@@ -9,13 +9,25 @@ A server-side rendered shopping list app built with React, Vite, and styled-comp
 
 ## Quick Start
 
-### 1. Install Dependencies
+### 1. Start Backend API
+
+First, start the backend server from the `shopping-list-api` repository:
+
+```bash
+cd shopping-list-api
+npm install
+npm start
+```
+
+Backend will run on `http://localhost:3000`
+
+### 2. Install Dependencies
 
 ```bash
 npm install
 ```
 
-### 2. Start Development Server
+### 3. Start Development Server
 
 ```bash
 npm run dev
@@ -35,9 +47,10 @@ Open `http://localhost:8080`
 - **Frontend**: React 18, React Router 7
 - **Styling**: styled-components with SSR
 - **State**: TanStack Query (React Query), React Context API
+- **Validation**: Zod (runtime validation)
 - **Build**: Vite
 - **Server**: Express + Vite SSR
-- **Backend**: Separate API service (port 3000)
+- **Backend**: Separate API service from `shopping-list-api` repository (port 3000)
 
 ## Project Structure
 
