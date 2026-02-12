@@ -1,24 +1,8 @@
-import { useParams, Link, useNavigate } from 'react-router-dom'
-import { useDeleteItem } from '../providers/ServerStateProvider/mutations'
-import { useItem } from '../providers/ServerStateProvider/selectors'
+import { Link } from 'react-router-dom'
+import { useItemDetails } from './useItemDetails'
 
 export function ItemDetailsPage() {
-  const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
-
-  const itemId = parseInt(id!, 10)
-
-  const { data: item, isLoading, error } = useItem(itemId)
-
-  const deleteMutation = useDeleteItem()
-
-  const handleDelete = () => {
-    deleteMutation.mutate(itemId, {
-      onSuccess: () => {
-        navigate('/')
-      },
-    })
-  }
+  const { item, isLoading, error, isPending, onDelete } = useItemDetails()
 
   if (isLoading) {
     return (
@@ -64,11 +48,11 @@ export function ItemDetailsPage() {
 
         <div className="flex gap-4">
           <button
-            onClick={handleDelete}
-            disabled={deleteMutation.isPending}
+            onClick={onDelete}
+            disabled={isPending}
             className="px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50"
           >
-            {deleteMutation.isPending ? 'Deleting...' : 'Delete Item'}
+            {isPending ? 'Deleting...' : 'Delete Item'}
           </button>
         </div>
       </div>

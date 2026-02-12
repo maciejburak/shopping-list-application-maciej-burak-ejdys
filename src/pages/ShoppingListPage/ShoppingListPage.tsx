@@ -1,20 +1,16 @@
 import { memo } from 'react'
 import { Link } from 'react-router-dom'
-import { useDialogActions } from '../providers/DialogProvider'
-import { useItemsData } from '../providers/ServerStateProvider/selectors'
-import { useDeleteItem } from '../providers/ServerStateProvider/mutations'
+import { useShoppingList } from './useShoppingList'
 
 export const ShoppingListPage = memo(function ShoppingListPage() {
-  const { openForCreate, openForEdit } = useDialogActions()
-  const items = useItemsData()
-  const deleteMutation = useDeleteItem()
+  const { items, onAddNew, onEdit, onDelete } = useShoppingList()
 
   return (
     <div className="max-w-4xl mx-auto p-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Shopping List</h1>
         <button
-          onClick={openForCreate}
+          onClick={onAddNew}
           className="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700"
         >
           Add New Item
@@ -39,13 +35,13 @@ export const ShoppingListPage = memo(function ShoppingListPage() {
               </div>
               <div className="flex gap-2">
                 <button
-                  onClick={() => openForEdit(item.id)}
+                  onClick={() => onEdit(item.id)}
                   className="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded"
                 >
                   Edit
                 </button>
                 <button
-                  onClick={() => deleteMutation.mutate(item.id)}
+                  onClick={() => onDelete(item.id)}
                   className="px-4 py-2 text-red-600 hover:bg-red-50 rounded"
                 >
                   Delete
