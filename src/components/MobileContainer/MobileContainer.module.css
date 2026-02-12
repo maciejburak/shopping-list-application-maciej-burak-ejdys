@@ -1,0 +1,57 @@
+.container {
+  width: 375px;
+  height: 812px;
+  background: white;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 30px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.notch {
+  height: 30px;
+  background: #DCDCE5;
+  border-radius: 0 0 30px 30px;
+  margin: 0 auto 0;
+  width: 215px;
+  flex-shrink: 0;
+}
+
+.content {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 73px;
+}
+
+.contentContainer {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.bottomPart {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 73px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 8px;
+  z-index: 10;
+  border: 1px solid #E3E3E5;
+}
+
+.bottomBar {
+  width: 135px;
+  height: 5px;
+  background: #666666;
+  border-radius: 100px;
+}

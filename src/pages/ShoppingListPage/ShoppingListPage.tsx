@@ -1,56 +1,41 @@
-import { memo } from 'react'
-import { Link } from 'react-router-dom'
-import { useShoppingList } from './useShoppingList'
+import { memo } from "react";
+import { useShoppingList } from "./useShoppingList";
+import { ShoppingListItem } from "../../components/ShoppingListItem/ShoppingListItem";
+import styles from "./ShoppingListPage.module.css";
 
 export const ShoppingListPage = memo(function ShoppingListPage() {
-  const { items, onAddNew, onEdit, onDelete } = useShoppingList()
+  const { items, onAddNew, onEdit, onDelete } = useShoppingList();
+
+  const total = items.reduce((sum, item) => sum + item.price, 0);
 
   return (
-    <div className="max-w-4xl mx-auto p-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Shopping List</h1>
-        <button
-          onClick={onAddNew}
-          className="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-        >
-          Add New Item
-        </button>
-      </div>
+    <div className="page-container">
+      <h1 className="page-title">Shopping List</h1>
 
-      <div className="space-y-4">
-        {items.map((item) => (
-          <div key={item.id} className="p-4 border rounded bg-white shadow-sm">
-            <div className="flex justify-between items-start">
-              <div>
-                <Link
-                  to={`/items/${item.id}`}
-                  className="text-lg font-semibold text-blue-600 hover:underline"
-                >
-                  {item.name}
-                </Link>
-                <p className="text-xl font-bold text-green-600">${item.price.toFixed(2)}</p>
-                {item.description && (
-                  <p className="text-gray-600 text-sm mt-2">{item.description}</p>
-                )}
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => onEdit(item.id)}
-                  className="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => onDelete(item.id)}
-                  className="px-4 py-2 text-red-600 hover:bg-red-50 rounded"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          </div>
+      <div className={styles.list}>
+        {items.map((item, index) => (
+          <ShoppingListItem
+            key={item.id}
+            id={item.id}
+            name={item.name}
+            price={item.price}
+            index={index}
+            onEdit={onEdit}
+            onDelete={onDelete}
+            styles={styles}
+          />
         ))}
       </div>
+
+      <div className={styles.total}>
+        <span className={styles.totalLabel}>Total :</span>
+        <span className={styles.totalValue}>{total} NIS</span>
+      </div>
+
+      <button onClick={onAddNew} className={styles.addButton}>
+        <span style={{ fontSize: '20px', fontWeight: 600 }}>+</span>
+        <span>Add Product</span>
+      </button>
     </div>
-  )
-})
+  );
+});

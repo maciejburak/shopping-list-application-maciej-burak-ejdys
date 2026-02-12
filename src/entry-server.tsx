@@ -2,6 +2,7 @@ import { renderToString } from 'react-dom/server'
 import { StaticRouter } from 'react-router'
 import { QueryClient, QueryClientProvider, dehydrate } from '@tanstack/react-query'
 import { App } from './App'
+import './index.css'
 
 interface RenderOptions {
   url: string

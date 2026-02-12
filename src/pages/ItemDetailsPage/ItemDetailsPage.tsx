@@ -1,50 +1,48 @@
-import { Link } from 'react-router-dom'
-import { useItemDetails } from './useItemDetails'
+import { useNavigate } from "react-router-dom";
+import { useItemDetails } from "./useItemDetails";
+import { IconButton } from "../../components/IconButton/IconButton";
+import { BackIcon } from "../../components/icons";
+import styles from "./ItemDetailsPage.module.css";
 
 export function ItemDetailsPage() {
-  const { item, error, isPending, onDelete } = useItemDetails()
+  const navigate = useNavigate();
+  const { item, isLoading, error } = useItemDetails();
+
+  if (isLoading) {
+    return (
+      <div className="page-container">
+        <div className={styles.loading}>Loading...</div>
+      </div>
+    );
+  }
 
   if (error || !item) {
     return (
-      <div className="max-w-4xl mx-auto p-8">
-        <Link to="/" className="text-blue-600 hover:underline mb-4 inline-block">
-          ← Back to list
-        </Link>
-        <div className="text-red-600">Item not found</div>
+      <div className="page-container">
+        <div className={styles.error}>Item not found</div>
       </div>
-    )
+    );
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-8">
-      <Link to="/" className="text-blue-600 hover:underline mb-4 inline-block">
-        ← Back to list
-      </Link>
+    <div className="page-container" style={{ paddingBottom: '60px' }}>
+      <div className={styles.header}>
+        <IconButton
+          onClick={() => navigate("/")}
+          className={`icon-button ${styles.backButton}`}
+          aria-label="Back to list"
+        >
+          <BackIcon />
+        </IconButton>
 
-      <div className="bg-white border rounded-lg shadow-lg p-8">
-        <h1 className="text-4xl font-bold mb-4">{item.name}</h1>
-
-        <p className="text-3xl font-bold text-green-600 mb-6">
-          ${item.price.toFixed(2)}
-        </p>
-
-        {item.description && (
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold mb-2">Description</h2>
-            <p className="text-gray-700">{item.description}</p>
-          </div>
-        )}
-
-        <div className="flex gap-4">
-          <button
-            onClick={onDelete}
-            disabled={isPending}
-            className="px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50"
-          >
-            {isPending ? 'Deleting...' : 'Delete Item'}
-          </button>
+        <div className={styles.titleContainer}>
+          <h1 className="page-title" style={{ marginBottom: 0 }}>{item.name}</h1>
         </div>
       </div>
+
+      {item.description && (
+        <p className={styles.description}>{item.description}</p>
+      )}
     </div>
-  )
+  );
 }

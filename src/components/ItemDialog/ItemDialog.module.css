@@ -1,0 +1,95 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  pointer-events: auto;
+}
+
+.dialog {
+  width: 375px;
+  height: 333px;
+  background: white;
+  position: absolute;
+  top: 146px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 -4px 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  padding: 16px 20px;
+  position: relative;
+}
+
+.closeButton {
+  position: absolute;
+  right: 8px;
+  top: 30px;
+  transform: translateY(-50%);
+}
+
+.content {
+  padding: 24px 20px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input {
+  width: 157px;
+  padding: 12px 0;
+  border: none;
+  border-bottom: 1px solid #E3E3E5;
+  font-size: 16px;
+  color: #333;
+  background: white;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  outline: none;
+  border-bottom-color: #FF9500;
+}
+
+.textarea {
+  padding: 12px 0;
+  border: none;
+  font-size: 16px;
+  color: #333;
+  background: white;
+  min-height: 120px;
+  resize: none;
+  transition: border-color 0.2s;
+}
+
+.textarea:focus {
+  outline: none;
+  border-bottom-color: #FF9500;
+}
+
+.footer {
+  padding: 16px 20px;
+  display: flex;
+  justify-content: flex-end;
+}
