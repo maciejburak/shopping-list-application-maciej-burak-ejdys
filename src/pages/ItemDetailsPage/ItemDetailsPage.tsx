@@ -4,6 +4,7 @@ import { ContentContainer } from "../../components/containers/ContentContainer";
 import { IconButton } from "../../components/common/IconButton";
 import { BackIcon } from "../../components/icons";
 import * as S from "./ItemDetailsPage.styles";
+import { MobileContainer } from "../../components/containers/MobileContainer";
 
 export function ItemDetailsPage() {
   const navigate = useNavigate();
@@ -11,39 +12,43 @@ export function ItemDetailsPage() {
 
   if (isLoading) {
     return (
-      <ContentContainer>
-        <S.Loading>Loading...</S.Loading>
-      </ContentContainer>
+      <MobileContainer>
+        <ContentContainer>
+          <S.Loading>Loading...</S.Loading>
+        </ContentContainer>
+      </MobileContainer>
     );
   }
 
   if (error || !item) {
     return (
-      <ContentContainer>
-        <S.Error>Item not found</S.Error>
-      </ContentContainer>
+      <MobileContainer>
+        <ContentContainer>
+          <S.Error>Item not found</S.Error>
+        </ContentContainer>
+      </MobileContainer>
     );
   }
 
   return (
-    <ContentContainer>
-      <S.Header>
-        <IconButton
-          onClick={() => navigate("/")}
-          aria-label="Back to list"
-          style={{ position: 'absolute', left: 0 }}
-        >
-          <BackIcon />
-        </IconButton>
+    <MobileContainer>
+      <ContentContainer>
+        <S.Header>
+          <IconButton
+            onClick={() => navigate("/")}
+            aria-label="Back to list"
+            style={{ position: "absolute", left: 0 }}
+          >
+            <BackIcon />
+          </IconButton>
 
-        <S.TitleContainer>
-          <S.Title>{item.name}</S.Title>
-        </S.TitleContainer>
-      </S.Header>
+          <S.TitleContainer>
+            <S.Title>{item.name}</S.Title>
+          </S.TitleContainer>
+        </S.Header>
 
-      {item.description && (
-        <S.Description>{item.description}</S.Description>
-      )}
-    </ContentContainer>
+        {item.description && <S.Description>{item.description}</S.Description>}
+      </ContentContainer>
+    </MobileContainer>
   );
 }

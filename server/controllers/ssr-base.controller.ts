@@ -1,4 +1,4 @@
-import type { Request, Response, NextFunction } from 'express'
+import type { Request, Response } from 'express'
 import type { ViteDevServer } from 'vite'
 import { readFileSync } from 'fs'
 import { resolve, dirname } from 'path'
@@ -38,18 +38,4 @@ export async function renderSSR(
     console.error('❌ SSR Error:', error)
     throw error
   }
-}
-
-export function shouldSkipRoute(url: string): boolean {
-  return url.includes('.')
-}
-
-export function handleSSRError(
-  error: Error,
-  _req: Request,
-  _res: Response,
-  next: NextFunction
-): void {
-  console.error('❌ SSR Handler Error:', error)
-  next(error)
 }
